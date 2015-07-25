@@ -20,7 +20,7 @@
 		<script>
 
 			var camera, controls, scene, renderer, manager, effect, reticle;
-			var audio, audioLong;
+			var audio, audioLong, audioCtx, panner, source, listener;
 			var geometry, material, mesh;
 
 			var init = function () {
@@ -99,8 +99,25 @@
         			this.currentTime = 0;
         			this.play();
     			}, false);
-  				audioLong.play();
+  				//audioLong.play();
 
+  				AaudioContext = window.AudioContext || window.webkitAudioContext;
+				audioCtx = new AudioContext();
+
+				panner = audioCtx.createPanner();
+				panner.panningModel = 'HRTF';
+				panner.distanceModel = 'inverse';
+				panner.refDistance = 10;
+				panner.maxDistance = 500;
+				panner.rolloffFactor = 10;
+				panner.coneInnerAngle = 360;
+				panner.coneOuterAngle = 0;
+				panner.coneOuterGain = 0;
+				panner.setOrientation(1,0,0);
+				panner.setPosition(mesh.position.x, mesh.position.y, mesh.position.z);
+
+			    listener = audioCtx.listener;
+				listener.setPosition(camera.position.x, camera.position.y, camera.position.z);
 			}
 
 			var animate = function () {				
@@ -116,7 +133,39 @@
 				requestAnimationFrame( animate );
 			}
 
+			function loadSound() {
+ 				source = audioCtx.createBufferSource();
+  				var request = new XMLHttpRequest();
+
+  				request.open('GET', '382532294935.aac', true);
+
+  				request.responseType = 'arraybuffer';
+
+
+  				request.onload = function() {
+    				var audioData = request.response;
+
+    				audioCtx.decodeAudioData(audioData, 
+    					function(buffer) {
+		        			var myBuffer = buffer;
+		        			source.buffer = myBuffer;
+
+		        			// Associate the source and audio with the correct panner.
+		        			source.connect(panner);
+		        			panner.connect(audioCtx.destination);
+
+		        			source.loop = true;
+	      				},
+	      				function(e){"Error with decoding audio data" + e.err}
+      				);
+
+  				}
+
+  				request.send();
+			};
+
 			init();
+			loadSound();
 			animate();
 
 			function onWindowResize() {
@@ -136,7 +185,8 @@
   					case 78: camera.translateY(-10); break; // n
   					case 13: mesh.material.color.setRGB( Math.random(), Math.random(), Math.random() ); 
   					    audio.currentTime = 0;
-  						audio.play();
+  						//audio.play();
+  						source.start();
   						break;
   				}	
 
@@ -147,6 +197,8 @@
   				if (camera.position.x > 100) {
       				camera.position.x = 100;
   				}	  				
+				
+				listener.setPosition(camera.position.x, camera.position.y, camera.position.z);
 
   				console.log("camera: " + JSON.stringify(camera.position));
 
