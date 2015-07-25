@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>JS deps</title>
+    <!-- The style.css file allows you to change the look of your web pages.
+         If you include the next line in all your web pages, they will all share the same look.
+         This makes it easier to make new pages for your site. -->
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+  </head>
+  <body>
+    <h1>What to include and why</h1>
+<p>three.js 3d library <b>./three.js</b></p>
+<p>VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object.  <b>./VRControls.js</b></p>
+<p>VREffect.js handles stereo camera setup and rendering. <b>./VREffect.js</b></p>
+<p>A polyfill for WebVR using the Device{Motion,Orientation}Event API. <b>./webvr-polyfill.js</b></p>
+<p>Helps enter and exit VR mode, provides best practices while in VR. <b>./webvr-manager.js</b></p>
+
+<h2>Assuming you are hosting your code on this Neocities account:</h2>
+<textarea rows="18" cols="140">
+<script src="/js/three.js"></script>
+<!--
+VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object.
+-->
+<script src="/js/VRControls.js"></script>
+<!--
+VREffect.js handles stereo camera setup and rendering.
+-->
+<script src="/js/VREffect.js"></script>
+<!--
+A polyfill for WebVR using the Device{Motion,Orientation}Event API.
+-->
+<script src="/js/webvr-polyfill.js"></script>
+<!--
+Helps enter and exit VR mode, provides best practices while in VR.
+-->
+<script src="/js/webvr-manager.js"></script>
+</textarea>
+
+<h2>For more details on this boiler plate</h2>
+<p>See <a href="https://github.com/borismus/webvr-boilerplate/">github.com/borismus/webvr-boilerplate/</a></p>
+  </body>
+</html>
